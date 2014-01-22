@@ -10,7 +10,7 @@
 int main( int argc, char *argv[] ) {
   const char *words_path = argc > 1 ? argv[1] : "/usr/share/dict/words";
 
-  std::unordered_set<std::string> words_set;
+  std::unordered_set<std::string> words_set (255350);
 
   std::ifstream words_file;
   words_file.open(words_path);
