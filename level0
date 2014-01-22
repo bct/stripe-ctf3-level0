@@ -6,11 +6,18 @@
 # have it already.
 
 path = ARGV.length > 0 ? ARGV[0] : '/usr/share/dict/words'
-entries = File.read(path).split("\n")
+
+require 'set'
+
+words = Set.new
+  
+File.open(path).each_line do |line|
+  words << line.chop
+end
 
 contents = $stdin.read
 output = contents.gsub(/[^ \n]+/) do |word|
-  if entries.include?(word.downcase)
+  if words.include?(word.downcase)
     word
   else
     "<#{word}>"
