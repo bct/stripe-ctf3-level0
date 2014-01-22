@@ -1,37 +1,36 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
+#include <array>
 #include <algorithm>
 #include <string>
 #include <string.h>
 
 // I am aware that this is horrible C++.
+const int word_count = 234937;
+
+bool cmp(const char* a, const char* b) {
+  return strcmp(a, b) < 0;
+}
+
+void test(const char* x) {
+  std::cout << x << std::endl;
+}
 
 int main( int argc, char *argv[] ) {
   const char *words_path = argc > 1 ? argv[1] : "/usr/share/dict/words";
 
-  std::vector<std::string> words;
-  words.reserve(250000);
+  std::array<char[32], word_count> words;
 
-  std::ifstream words_file;
-  words_file.open(words_path);
+  std::ifstream precomputed("precomputed.bin", std::ios::binary);
+  precomputed.read((char*)&words[0], word_count * 32);
 
-  std::string current_word;
-
-  int n = 0;
-
-  while(!words_file.eof()) {
-    getline(words_file, current_word);
-
-    // downcase everything, caps mean it won't be sorted by default
-    std::transform(current_word.begin(), current_word.end(), current_word.begin(), ::tolower);
-
-    words.push_back(current_word);
-  }
+  //std::for_each(words.begin(), words.end(), test);
 
   char whitespace;
 
   std::cin >> std::noskipws;
+
+  std::string current_word;
 
   while(!std::cin.eof()) {
     std::cin >> current_word >> whitespace;
@@ -44,7 +43,7 @@ int main( int argc, char *argv[] ) {
 
     std::transform(current_word.begin(), current_word.end(), current_word.begin(), ::tolower);
 
-    if(std::binary_search(words.begin(), words.end(), current_word)) {
+    if(std::binary_search(words.begin(), words.end(), current_word.c_str(), cmp)) {
       std::cout << orig_word;
     } else {
       std::cout << "<" << orig_word << ">";
