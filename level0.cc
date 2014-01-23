@@ -5,8 +5,9 @@
 #include <string>
 #include <string.h>
 
+#include "precomputed.c"
+
 // I am aware that this is horrible C++.
-const int word_count = 234937;
 
 bool cmp(const char* a, const char* b) {
   return strcmp(a, b) < 0;
@@ -17,15 +18,6 @@ void test(const char* x) {
 }
 
 int main( int argc, char *argv[] ) {
-  const char *words_path = argc > 1 ? argv[1] : "/usr/share/dict/words";
-
-  std::array<char[32], word_count> words;
-
-  std::ifstream precomputed("precomputed.bin", std::ios::binary);
-  precomputed.read((char*)&words[0], word_count * 32);
-
-  //std::for_each(words.begin(), words.end(), test);
-
   char whitespace;
 
   std::cin >> std::noskipws;
@@ -43,7 +35,7 @@ int main( int argc, char *argv[] ) {
 
     std::transform(current_word.begin(), current_word.end(), current_word.begin(), ::tolower);
 
-    if(std::binary_search(words.begin(), words.end(), current_word.c_str(), cmp)) {
+    if(std::binary_search(words, words + WORD_COUNT, current_word.c_str(), cmp)) {
       std::cout << orig_word;
     } else {
       std::cout << "<" << orig_word << ">";
