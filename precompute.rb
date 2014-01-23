@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # I determined that the longest word is 25chars (including terminator)
-MAX_WORD_LENGTH = 25
+MAX_WORD_LENGTH = 32
 
 
 words = File.readlines("words").sort.uniq
